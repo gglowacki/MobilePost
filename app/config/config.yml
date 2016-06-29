@@ -59,15 +59,13 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
-
+web_profiler:
+    intercept_redirects: true
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
-    host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
-    spool:     { type: memory }
-
 
 sensio_framework_extra:
     view:   {   annotations: false }
@@ -110,8 +108,13 @@ fos_rest:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: AppBundle\Entity\User
-    
+    user_class: AppBundle\Entity\User 
+    service:
+        mailer: fos_user.mailer.twig_swift	
+    registration:
+        confirmation:
+            enabled: true 	   
+            template: email/register_confirmation.email.twig         	
 assetic:
     debug:          '%kernel.debug%'
     use_controller: false

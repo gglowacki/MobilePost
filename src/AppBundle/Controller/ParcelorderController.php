@@ -32,6 +32,35 @@ class ParcelorderController extends FOSRestController {
 		return new JsonResponse($order);
 	}
     
+	 /**
+     * @Route("/parcelorder.{_format}", name="parcelorder")
+     * @Method({"GET"})
+     */
+    public function getAllparcelorderAction()
+    {
+        $parcelorders = $this->getDoctrine()->getRepository('AppBundle:ParcelOrder')->
+            findAll();
+
+        if (!$parcelorders) {
+            throw $this->createNotFoundException('No parcel order found.');
+        }
+        $pracelorderarray = array();
+        foreach ($parcelorders as $parcelorder) {
+            $parcel = $this->getDoctrine()->getRepository('AppBundle:Parcel')->find($parcelorder->
+                getParcel());
+            $sender = $this->getDoctrine()->getRepository('AppBundle:AddressData')->find($parcelorder->
+                getSender());
+            $receiver = $this->getDoctrine()->getRepository('AppBundle:AddressData')->find($parcelorder->
+                getReceiver());
+            $order['parcel'] = $parcel->getId();
+            $order['sender'] = $sender->getId();
+            $order['receiver'] = $receiver->getId();
+            $order['tracking'] = $parcelorder->getTracking();
+            array_push($pracelorderarray, $order);
+        }
+        return new JsonResponse($pracelorderarray);
+    }
+	
     /**
      * @Route("/parcelorder.{_format}", name="post_parcelorder")
      * @Method({"POST"})
