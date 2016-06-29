@@ -1,0 +1,14 @@
+{% block subject %}Registration confirmation{% endblock %}
+
+{% block body_text %}
+
+Hello {{ user.username }} !
+
+There is your password: {{ user.plainPassword }} 
+You can confirm your account by accessing link below
+{{ confirmationUrl }}
+
+Greetings,
+MobilePost team.
+
+{% endblock %}
